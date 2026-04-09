@@ -1,9 +1,16 @@
 #!/bin/bash
 
+USERID=$(id -u)
+
+if [ $USERID -ne o]; then
+echo "Please run this script with root access"
+else
+ echo "you are running with root access"
+fi
+
 #install MongoDB
 dnf install mongodb-org -y 
 
-if [ $? -ne 0]
 
 # Start & Enable MongoDB Service
 systemctl start mongod
