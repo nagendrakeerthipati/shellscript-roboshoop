@@ -31,30 +31,30 @@ VALIDATE() {
     fi
 }
 
-dnf module disable nginx -y
-dnf module enable nginx:1.24 -y
-dnf install nginx -y
+dnf module disable nginx -y &>>LOG_FILE
+dnf module enable nginx:1.24 -y &>>LOG_FILE
+dnf install nginx -y LOG_FILE &>>LOG_FILE
 VALIDATE $? "installing nginx"
 
 
 systemctl enable nginx 
-systemctl start nginx  
+systemctl start nginx   LOG_FILE
 VALIDATE $? " service started" 
 
 rm -rf /usr/share/nginx/html/* 
 VALIDATE $? "removing content in the "
 
-curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip
+curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip &>>LOG_FILE
 VALIDATE $? "downloading  file"
 
 
 cd /usr/share/nginx/html 
-unzip /tmp/frontend.zip
+unzip /tmp/frontend.zip &>>LOG_FILE
 VALIDATE $? "unzip the file"
 
 
-cp SCRIPT_DIR/nginx.conf /etc/nginx/nginx.conf
+cp SCRIPT_DIR/nginx.conf /etc/nginx/nginx.conf &>>LOG_FILE
 VALIDATE $? "installing nginx"
 
-systemctl restart nginx 
+systemctl restart nginx  &>>LOG_FILE
 VALIDATE $? "nginx restart ."
