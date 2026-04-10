@@ -8,9 +8,9 @@ N="\e[0m"
 LOGS_FOLDER="/var/log/roboshop-logs"
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
 LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log"
-SCRIPT_DIR=$PWD
+SCRIPT_DIR="$PWD"
 
-mkdir -p $LOGS_FOLDER
+mkdir -p "$LOGS_FOLDER"
 echo "Script started executing at: $(date)" | tee -a $LOG_FILE
 
 # check the user has root priveleges or not
@@ -31,30 +31,30 @@ VALIDATE() {
     fi
 }
 
-dnf module disable nginx -y &>>LOG_FILE
-dnf module enable nginx:1.24 -y &>>LOG_FILE
-dnf install nginx -y  &>>LOG_FILE
+dnf module disable nginx -y &>>$LOG_FILE
+dnf module enable nginx:1.24 -y &>>$LOG_FILE
+dnf install nginx -y  &>>$LOG_FILE
 VALIDATE $? "installing nginx"
 
 
-systemctl enable nginx 
-systemctl start nginx &>>LOG_FILE
+systemctl enable nginx  &>>$LOG_FILE
+systemctl start nginx &>>$LOG_FILE
 VALIDATE $? " service started" 
 
 rm -rf /usr/share/nginx/html/* 
 VALIDATE $? "removing content in the "
 
-curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip &>>LOG_FILE
+curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip &>>$LOG_FILE
 VALIDATE $? "downloading  file"
 
 
 cd /usr/share/nginx/html  || exit
-unzip /tmp/frontend.zip &>>LOG_FILE
+unzip /tmp/frontend.zip &>>$LOG_FILE
 VALIDATE $? "unzip the file"
 
 
-cp $SCRIPT_DIR/nginx.conf /etc/nginx/nginx.conf &>>LOG_FILE
+cp $SCRIPT_DIR/nginx.conf /etc/nginx/nginx.conf &>>$LOG_FILE
 VALIDATE $? "copying nginx"
 
-systemctl restart nginx  &>>LOG_FILE
+systemctl restart nginx  &>>$LOG_FILE
 VALIDATE $? "nginx restart ."
