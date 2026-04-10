@@ -47,7 +47,7 @@ else
   VALIDATE $? "Creating system user"
 fi
 
-mkdir -P /app &>>$LOG_FILE
+mkdir /app &>>$LOG_FILE
 VALIDATE $? "creating app dir" 
 
 
