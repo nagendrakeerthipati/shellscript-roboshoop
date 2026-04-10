@@ -47,7 +47,7 @@ else
   VALIDATE $? "Creating system user"
 fi
 
-mkdir -P /app &>>$LOG_FILE
+mkdir -p /app
 VALIDATE $? "creating app dir" 
 
 
@@ -86,3 +86,5 @@ if [ "$STATUS" -lt 0 ]; then
 else
     echo -e "Data is already loaded ... $Y SKIPPING $N"
 fi
+
+
