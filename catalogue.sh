@@ -34,14 +34,18 @@ VALIDATE() {
 dnf module disable nodejs -y &>>$LOG_FILE
 VALIDATE $? "disabling nodejs"
 
-dnf module enable nodejs:20 -y
+dnf module enable nodejs:20 -y &>>$LOG_FILE
 VALIDATE $? "enabling nodejs"
 
-dnf install nodejs -y
+dnf install nodejs -y &>>$LOG_FILE
 VALIDATE $? "Installing nodejs"
 
-useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
-VALIDATE $? "Creating system user"
+if id roboshop &>>"$LOG_FILE"; then
+  echo "User roboshop already exists... SKIPPING" &>>"$LOG_FILE"
+else
+  useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>"$LOG_FILE"
+  VALIDATE $? "Creating system user"
+fi
 
 mkdir -P /app &>>$LOG_FILE
 VALIDATE $? "creating app dir" 
