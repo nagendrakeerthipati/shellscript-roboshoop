@@ -8,7 +8,7 @@ N="\e[0m"
 LOGS_FOLDER="/var/log/roboshop-logs"
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
 LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log"
-SCRIPT_DIR=$(PWD)
+SCRIPT_DIR=$PWD
 
 mkdir -p $LOGS_FOLDER
 echo "Script started executing at: $(date)" | tee -a $LOG_FILE
@@ -31,7 +31,7 @@ VALIDATE() {
     fi
 }
 
-dnf module disable nodejs -y
+dnf module disable nodejs -y &>>$LOG_FILE
 VALIDATE $? "disabling nodejs"
 
 dnf module enable nodejs:20 -y
