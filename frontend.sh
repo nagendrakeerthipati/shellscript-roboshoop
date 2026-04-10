@@ -53,8 +53,8 @@ unzip /tmp/frontend.zip &>>LOG_FILE
 VALIDATE $? "unzip the file"
 
 
-cp SCRIPT_DIR/nginx.conf /etc/nginx/nginx.conf &>>LOG_FILE
-VALIDATE $? "installing nginx"
+cp $SCRIPT_DIR/nginx.conf /etc/nginx/nginx.conf &>>LOG_FILE
+VALIDATE $? "copying nginx"
 
 systemctl restart nginx  &>>LOG_FILE
 VALIDATE $? "nginx restart ."
