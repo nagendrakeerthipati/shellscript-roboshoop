@@ -51,7 +51,7 @@ mkdir -P /app &>>$LOG_FILE
 VALIDATE $? "creating app dir" 
 
 
-curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip 
+curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>>$LOG_FILE
 VALIDATE $? "Downloading application code"
 
 rm -rf/app/*  &>>$LOG_FILE
@@ -64,7 +64,7 @@ cd /app
 npm install &>>$LOG_FILE
 VALIDATE $? "Installing npm"
 
-cp SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service &>>$LOG_FILE
+cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service &>>$LOG_FILE
 VALIDATE $? "copying to dir"
 
 systemctl daemon-reload &>>$LOG_FILE
@@ -74,7 +74,7 @@ systemctl enable catalogue &>>$LOG_FILE
 systemctl start catalogue &>>$LOG_FILE
 VALIDATE $? "Started catalogue"
 
-cp mongo.repo /etc/yum.repos.d/mongodb.repo
+cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongodb.repo
 dnf install mongodb-mongosh -y &>>$LOG_FILE
 VALIDATE $? "Copying MongoDB repo"
 
