@@ -58,7 +58,7 @@ else
     echo "Dispatch already built... SKIPPING" | tee -a $LOG_FILE
 fi
 
-cp $SCRIPT_DIR/systemd/dispatch.service /etc/systemd/system/dispatch.service &>>$LOG_FILE
+cp $SCRIPT_DIR/dispatch.service /etc/systemd/system/dispatch.service &>>$LOG_FILE
 VALIDATE $? "Copying systemd service file"
 
 
