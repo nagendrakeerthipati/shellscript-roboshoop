@@ -40,9 +40,12 @@ VALIDATE $? "Enabling redis"
 systemctl start redis &>>$LOG_FILE
 VALIDATE $? "Starting redis"
 
-sed -i 's/127.0.0.0/0.0.0.0/g' /etc/redis.conf
-sed -i 's/protect-mode yes/protect-mode no/g' /etc/redis.conf   
+sed -i 's/127.0.0.0/0.0.0.0/g' /etc/redis/redis.conf
+sed -i 's/protect-mode yes/protect-mode no/g' /etc/redis/redis.conf   
 VALIDATE $? "Editing redis conf file for remote connections"
 
 systemctl restart redis &>>$LOG_FILE
 VALIDATE $? "Restarting redis"
+
+echo -e "Script exection completed successfully, $Y time taken: $TOTAL_TIME seconds $N" | tee -a $LOG_FILE
+
