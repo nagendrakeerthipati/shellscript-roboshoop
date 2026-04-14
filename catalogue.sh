@@ -81,7 +81,7 @@ VALIDATE $? "Copying MongoDB repo"
 
 STATUS=$(mongosh --host mongodb.sh.nagendrablog.site --eval 'db.getMongo().getDBNames().indexOf("catalogue")')
 if [ "$STATUS" -lt 0 ]; then
-    mongosh --host mongodb.nagendrablog.site </app/db/master-data.js &>>$LOG_FILE
+    mongosh --host mongodb.sh.nagendrablog.site </app/db/master-data.js &>>$LOG_FILE
     VALIDATE $? "Loading data into MongoDB"
 else
     echo -e "Data is already loaded ... $Y SKIPPING $N"
