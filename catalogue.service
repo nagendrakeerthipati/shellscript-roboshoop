@@ -12,3 +12,7 @@ SyslogIdentifier=catalogue
 
 [Install]
 WantedBy=multi-user.target
+
+###############
+Description
+This is the systemd service file for the Catalogue Service of the RoboShop application. It defines how the service should be started, what environment variables it needs, and how it should be identified in the system logs.
