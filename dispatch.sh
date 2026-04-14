@@ -22,8 +22,7 @@ fi
 # validate functions takes input as exit status, what command they tried to install
 VALIDATE() {
     if [ $1 -eq 0 ]; then
-        echo -e "$2 is ... $G SUCCESS $N" | tee -a $
-LOG_FILE
+        echo -e "$2 is ... $G SUCCESS $N" | tee -a $LOG_FILE
     else
         echo -e "$2 is ... $R FAILURE $N" | tee -a $LOG_FILE
         exit 1
@@ -33,14 +32,8 @@ LOG_FILE
 dnf install golang -y &>>$LOG_FILE
 VALIDATE $? "Installing golang"
 
-if id roboshop &>>"$LOG_FILE"; then
-  echo "User roboshop already exists... SKIPPING" &>>"$LOG_FILE"
-else
-  useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>"$LOG_FILE"
-  VALIDATE $? "Creating system user"
-fi
 
-mkdir -p /app
+mkdir -p /app &>>$LOG_FILE
 VALIDATE $? "creating app dir"
 
 curl -o /tmp/dispatch.zip https://roboshop-artifacts.s3.amazonaws.com/dispatch-v3.zip &>>$LOG_FILE
@@ -52,24 +45,31 @@ unzip /tmp/dispatch.zip  &>>$LOG_FILE
 VALIDATE $? "Unziping dispatch" &>>$LOG_FILE
 
 cd /app
+if [ ! -f "/app/dispatch" ]; then
+    go mod init dispatch &>>$LOG_FILE
+    VALIDATE $? "Initializing go module"
 
-go mod init dispatch &>>$LOG_FILE
-VALIDATE $? "Initializing go module"
+    go get &>>$LOG_FILE
+    VALIDATE $? "Downloading dependencies"
 
-go get &>>$LOG_FILE
-VALIDATE $? "Downloading dependencies"
+    go build &>>$LOG_FILE
+    VALIDATE $? "Building dispatch"
+else
+    echo "Dispatch already built... SKIPPING" | tee -a $LOG_FILE
+fi
 
-go build &>>$LOG_FILE
-VALIDATE $? "Building dispatch"
-
-cp SCRIPT_DIR/systemd/dispatch.service /etc/systemd/system/dispatch.service &>>$LOG_FILE
+cp $SCRIPT_DIR/systemd/dispatch.service /etc/systemd/system/dispatch.service &>>$LOG_FILE
 VALIDATE $? "Copying systemd service file"
+
+
 
 systemctl daemon-reload &>>$LOG_FILE
 VALIDATE $? "Reloading systemd daemon"
 
-systemctl enable dispatch 
-systemctl start dispatch  
+systemctl enable dispatch &>>$LOG_FILE
+VALIDATE $? "Enabling dispatch service"
+
+systemctl start dispatch  &>>$LOG_FILE
 VALIDATE $? "Starting dispatch service" 
 
 
