@@ -47,3 +47,6 @@ VALIDATE $? "Editing MongoDB conf file for remote connections"
 
 systemctl restart mongod &>>$LOG_FILE
 VALIDATE $? "Restarting MongoDB"
+
+echo -e "Script exection completed successfully, $Y time taken: $TOTAL_TIME seconds $N" | tee -a $LOG_FILE
+

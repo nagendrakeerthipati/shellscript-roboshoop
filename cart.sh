@@ -73,3 +73,7 @@ VALIDATE $? "daemon-reloading.."
 systemctl enable cart &>>$LOG_FILE
 systemctl start cart &>>$LOG_FILE
 VALIDATE $? "Started cart"
+
+
+echo -e "Script exection completed successfully, $Y time taken: $TOTAL_TIME seconds $N" | tee -a $LOG_FILE
+

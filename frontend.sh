@@ -58,3 +58,5 @@ VALIDATE $? "copying nginx"
 
 systemctl restart nginx  &>>$LOG_FILE
 VALIDATE $? "nginx restart ."
+
+echo -e "Script exection completed successfully, $Y time taken: $TOTAL_TIME seconds $N" | tee -a $LOG_FILE
