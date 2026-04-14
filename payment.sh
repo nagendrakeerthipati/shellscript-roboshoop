@@ -50,7 +50,7 @@ cd /app
 pip3 install -r requirements.txt &>>$LOG_FILE
 VALIDATE $? "Installing python dependencies"
 
-cp SCRIPT_DIR/payment.service /etc/systemd/system/payment.service &>>$LOG_FILE
+cp $SCRIPT_DIR/payment.service /etc/systemd/system/payment.service &>>$LOG_FILE
 VALIDATE $? "Copying payment systemd file"
 
 systemctl daemon-reload &>>$LOG_FILE
