@@ -79,12 +79,15 @@ dnf install mongodb-mongosh -y &>>$LOG_FILE
 VALIDATE $? "Copying MongoDB repo"
 
 
-STATUS=$(mongosh --host mongodb.nagendrablog.site --eval 'db.getMongo().getDBNames().indexOf("catalogue")')
+STATUS=$(mongosh --host mongodb.sh.nagendrablog.site --eval 'db.getMongo().getDBNames().indexOf("catalogue")')
 if [ "$STATUS" -lt 0 ]; then
     mongosh --host mongodb.nagendrablog.site </app/db/master-data.js &>>$LOG_FILE
     VALIDATE $? "Loading data into MongoDB"
 else
     echo -e "Data is already loaded ... $Y SKIPPING $N"
 fi
+
+echo -e "Script exection completed successfully, $Y time taken: $TOTAL_TIME seconds $N" | tee -a $LOG_FILE
+
 
 
